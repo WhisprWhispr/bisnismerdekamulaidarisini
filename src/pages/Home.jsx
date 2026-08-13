@@ -304,7 +304,7 @@ function Home() {
 
               <div className="form-group">
                 <label>Nama Domain (.netlify.app)</label>
-                <div style={{ display: 'flex', gap: '10px' }}>
+                <div className="domain-input-group">
                   <input 
                     type="text" 
                     className="form-control" 
