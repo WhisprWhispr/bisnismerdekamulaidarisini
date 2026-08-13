@@ -13,7 +13,6 @@ function Home() {
   const [formData, setFormData] = useState({ name: '', email: '', whatsapp: '', domain: '', category: '' });
   const [status, setStatus] = useState({ loading: false, error: null, success: false });
   const [slotCount, setSlotCount] = useState(0);
-  const [registrationsList, setRegistrationsList] = useState([]);
   const [domainStatus, setDomainStatus] = useState({ checking: false, available: null, error: null });
 
   // Domain availability check
@@ -78,13 +77,6 @@ function Home() {
     const unsubscribe = onSnapshot(collection(db, "registrations"), (snapshot) => {
       const size = snapshot.size;
       setSlotCount(size);
-      
-      const data = [];
-      snapshot.forEach(doc => {
-        data.push({ id: doc.id, ...doc.data() });
-      });
-      data.sort((a, b) => a.timestamp - b.timestamp);
-      setRegistrationsList(data);
       
       // Munculkan notifikasi pop-up otomatis jika slot sudah habis
       if (size >= 10 && !hasNotifiedFull) {
@@ -281,26 +273,7 @@ function Home() {
             </div>
           </div>
 
-          <div className="glass-panel info-card" style={{ marginTop: '0' }}>
-            <h3><FaListOl /> Live Antrean Terkini</h3>
-            {registrationsList.length === 0 ? (
-              <p style={{ color: 'var(--text-muted)' }}>Belum ada pendaftar. Jadilah yang pertama!</p>
-            ) : (
-              <ul style={{ marginTop: '1rem', listStyle: 'none', padding: 0 }}>
-                {registrationsList.map((reg, index) => (
-                  <li key={reg.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', marginBottom: '0.5rem', border: '1px solid rgba(255,255,255,0.05)' }}>
-                    <div style={{ display: 'flex', alignItems: 'center' }}>
-                      <span style={{ fontWeight: 'bold', marginRight: '10px', color: 'var(--accent)' }}>#{index + 1}</span>
-                      <span style={{ color: 'var(--text-light)', fontSize: '0.95rem' }}>{reg.domain}</span>
-                    </div>
-                    <div style={{ fontSize: '0.8rem', color: 'var(--success)', display: 'flex', alignItems: 'center' }}>
-                      <FaCheckCircle style={{marginRight:'4px'}}/> <span className="hide-on-mobile">Masuk Antrean</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+
 
         </div>
 

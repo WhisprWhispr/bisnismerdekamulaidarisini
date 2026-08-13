@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { collection, query, where, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
-import { FaSearch, FaCheckCircle, FaClock, FaTimesCircle, FaArrowLeft } from 'react-icons/fa';
+import { FaSearch, FaCheckCircle, FaClock, FaTimesCircle, FaArrowLeft, FaListOl } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import '../App.css';
 
@@ -10,6 +10,19 @@ function TrackStatus() {
   const [activeSearchDomain, setActiveSearchDomain] = useState('');
   const [status, setStatus] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [registrationsList, setRegistrationsList] = useState([]);
+
+  useEffect(() => {
+    const unsubscribe = onSnapshot(collection(db, "registrations"), (snapshot) => {
+      const data = [];
+      snapshot.forEach(doc => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      data.sort((a, b) => a.timestamp - b.timestamp);
+      setRegistrationsList(data);
+    });
+    return () => unsubscribe();
+  }, []);
 
   useEffect(() => {
     if (!activeSearchDomain) return;
@@ -90,6 +103,27 @@ function TrackStatus() {
             <p style={{ color: 'var(--text-light)' }}>Domain tersebut belum terdaftar, Anda mungkin salah mengetik, atau telah dihapus oleh Admin.</p>
           </div>
         )}
+
+        <div style={{ marginTop: '3rem', borderTop: '1px solid rgba(255,255,255,0.1)', paddingTop: '2rem' }}>
+          <h3 style={{ marginBottom: '1rem', display: 'flex', alignItems: 'center', gap: '10px' }}><FaListOl /> Live Antrean Terkini</h3>
+          {registrationsList.length === 0 ? (
+            <p style={{ color: 'var(--text-muted)', textAlign: 'center' }}>Belum ada pendaftar. Jadilah yang pertama!</p>
+          ) : (
+            <ul style={{ marginTop: '1rem', listStyle: 'none', padding: 0 }}>
+              {registrationsList.map((reg, index) => (
+                <li key={reg.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '1rem', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', marginBottom: '0.5rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                  <div style={{ display: 'flex', alignItems: 'center' }}>
+                    <span style={{ fontWeight: 'bold', marginRight: '15px', color: 'var(--accent)', fontSize: '1.2rem' }}>#{index + 1}</span>
+                    <span style={{ color: 'var(--text-light)', fontSize: '1rem' }}>{reg.domain}</span>
+                  </div>
+                  <div style={{ fontSize: '0.85rem', color: 'var(--success)', display: 'flex', alignItems: 'center' }}>
+                    <FaCheckCircle style={{marginRight:'6px'}}/> <span className="hide-on-mobile">Masuk Antrean</span>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
       </div>
     </div>
   );
