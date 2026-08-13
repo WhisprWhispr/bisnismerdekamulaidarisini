@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Aturan untuk tabel pendaftaran (registrations)
+    match /registrations/{document=**} {
+      // 1. Publik HANYA diizinkan mendaftar JIKA waktu server Firebase sudah melewati 17 Agustus 2026 pukul 11:20 WIB (04:20 UTC)
+      // Ini memastikan waktu HP/komputer pengguna yang dimanipulasi TIDAK BISA menembus sistem.
+      allow create: if request.time >= timestamp("2026-08-17T04:20:00Z");
+      
+      // 2. Semua orang diizinkan membaca data (Dibutuhkan untuk mengecek sisa slot secara realtime)
+      allow read: if true; 
+      
+      // 3. Hanya Admin yang sudah login yang diizinkan untuk mengedit atau menghapus data
+      allow update, delete: if request.auth != null;
+    }
+    
+  }
+}
