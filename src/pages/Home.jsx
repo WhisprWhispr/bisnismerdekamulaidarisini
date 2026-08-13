@@ -5,7 +5,6 @@ import { fetchServerTime, TARGET_DATE } from '../utils/timeCheck';
 import { FaCode, FaShoppingCart, FaUserTie, FaIdCard, FaCheckCircle, FaLock, FaUnlock, FaGlobe, FaTrophy, FaCalendarAlt, FaShareAlt, FaListOl } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import confetti from 'canvas-confetti';
-import toast from 'react-hot-toast';
 import '../App.css';
 
 function Home() {
