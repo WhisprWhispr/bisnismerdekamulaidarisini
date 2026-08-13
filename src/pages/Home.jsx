@@ -105,6 +105,9 @@ function Home() {
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+    if (e.target.name === 'domain') {
+      setDomainStatus({ checking: false, available: null, error: null });
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -126,6 +129,12 @@ function Home() {
       if (!formData.domain.endsWith('.netlify.app')) {
         setStatus({ loading: false, error: null, success: false });
         toast.error("Nama domain harus berakhiran .netlify.app!");
+        return;
+      }
+
+      if (domainStatus.available === null) {
+        setStatus({ loading: false, error: null, success: false });
+        toast.error("Wajib menekan tombol 'Cek Domain' terlebih dahulu!");
         return;
       }
 
