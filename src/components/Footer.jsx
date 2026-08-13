@@ -9,6 +9,7 @@ function Footer() {
       marginTop: 'auto'
     }}>
       <div style={{ marginBottom: '1rem', display: 'flex', justifyContent: 'center', gap: '1.5rem', flexWrap: 'wrap' }}>
+        <Link to="/track" style={{ color: 'var(--text-light)', textDecoration: 'none', fontWeight: 'bold' }}>Lacak Status</Link>
         <Link to="/privacy-policy" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Kebijakan Privasi</Link>
         <Link to="/terms" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Syarat & Ketentuan</Link>
         <Link to="/about" style={{ color: 'var(--text-muted)', textDecoration: 'none' }}>Tentang Kami</Link>

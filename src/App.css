@@ -393,6 +393,10 @@
     width: 100%;
     padding: 12px !important;
   }
+  
+  .hide-on-mobile {
+    display: none !important;
+  }
 }
 
 .domain-input-group {

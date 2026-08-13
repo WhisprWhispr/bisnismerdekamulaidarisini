@@ -2,7 +2,9 @@ import { useState, useEffect, useRef } from 'react';
 import { collection, addDoc, getDocs, onSnapshot } from 'firebase/firestore';
 import { db } from '../firebase';
 import { fetchServerTime, TARGET_DATE } from '../utils/timeCheck';
-import { FaCode, FaShoppingCart, FaUserTie, FaIdCard, FaCheckCircle, FaLock, FaUnlock, FaGlobe, FaTrophy, FaCalendarAlt } from 'react-icons/fa';
+import { FaCode, FaShoppingCart, FaUserTie, FaIdCard, FaCheckCircle, FaLock, FaUnlock, FaGlobe, FaTrophy, FaCalendarAlt, FaShareAlt, FaListOl } from 'react-icons/fa';
+import toast from 'react-hot-toast';
+import confetti from 'canvas-confetti';
 import toast from 'react-hot-toast';
 import '../App.css';
 
@@ -12,6 +14,7 @@ function Home() {
   const [formData, setFormData] = useState({ name: '', email: '', whatsapp: '', domain: '', category: '' });
   const [status, setStatus] = useState({ loading: false, error: null, success: false });
   const [slotCount, setSlotCount] = useState(0);
+  const [registrationsList, setRegistrationsList] = useState([]);
   const [domainStatus, setDomainStatus] = useState({ checking: false, available: null, error: null });
 
   // Domain availability check
@@ -77,6 +80,13 @@ function Home() {
       const size = snapshot.size;
       setSlotCount(size);
       
+      const data = [];
+      snapshot.forEach(doc => {
+        data.push({ id: doc.id, ...doc.data() });
+      });
+      data.sort((a, b) => a.timestamp - b.timestamp);
+      setRegistrationsList(data);
+      
       // Munculkan notifikasi pop-up otomatis jika slot sudah habis
       if (size >= 10 && !hasNotifiedFull) {
         toast('Mohon Maaf, Kuota Telah Habis!', {
@@ -107,6 +117,24 @@ function Home() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
     if (e.target.name === 'domain') {
       setDomainStatus({ checking: false, available: null, error: null });
+    }
+  };
+
+  const handleShare = async () => {
+    const shareText = "Halo! SukaCoding sedang membagikan 10 Website Gratis eksklusif spesial Kemerdekaan RI ke-81! 🇮🇩 Jangan lewatkan kesempatan emas ini untuk mendigitalkan bisnis Anda tanpa biaya sepeser pun. Siapa Cepat, Dia Dapat! Daftar sekarang di: " + window.location.href;
+    
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Website Gratis dari SukaCoding',
+          text: shareText,
+        });
+      } catch (err) {
+        console.log('Share canceled', err);
+      }
+    } else {
+      navigator.clipboard.writeText(shareText);
+      toast.success('Teks berhasil disalin ke clipboard! Silakan paste di sosmed/grup Anda.');
     }
   };
 
@@ -162,6 +190,14 @@ function Home() {
       setStatus({ loading: false, error: null, success: true });
       setSlotCount(querySnapshot.size + 1);
       setFormData({ name: '', email: '', whatsapp: '', domain: '', category: '' });
+      
+      confetti({
+        particleCount: 200,
+        spread: 90,
+        origin: { y: 0.6 },
+        colors: ['#ef4444', '#ffffff', '#10b981', '#3b82f6', '#f59e0b']
+      });
+      
       toast.success("Selamat! Anda berhasil mendaftar.");
 
     } catch (e) {
@@ -244,6 +280,27 @@ function Home() {
                 <h4>ID Card</h4>
               </div>
             </div>
+          </div>
+
+          <div className="glass-panel info-card" style={{ marginTop: '0' }}>
+            <h3><FaListOl /> Live Antrean Terkini</h3>
+            {registrationsList.length === 0 ? (
+              <p style={{ color: 'var(--text-muted)' }}>Belum ada pendaftar. Jadilah yang pertama!</p>
+            ) : (
+              <ul style={{ marginTop: '1rem', listStyle: 'none', padding: 0 }}>
+                {registrationsList.map((reg, index) => (
+                  <li key={reg.id} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0.8rem', background: 'rgba(0,0,0,0.3)', borderRadius: '8px', marginBottom: '0.5rem', border: '1px solid rgba(255,255,255,0.05)' }}>
+                    <div style={{ display: 'flex', alignItems: 'center' }}>
+                      <span style={{ fontWeight: 'bold', marginRight: '10px', color: 'var(--accent)' }}>#{index + 1}</span>
+                      <span style={{ color: 'var(--text-light)', fontSize: '0.95rem' }}>{reg.domain}</span>
+                    </div>
+                    <div style={{ fontSize: '0.8rem', color: 'var(--success)', display: 'flex', alignItems: 'center' }}>
+                      <FaCheckCircle style={{marginRight:'4px'}}/> <span className="hide-on-mobile">Masuk Antrean</span>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
 
         </div>
@@ -372,6 +429,12 @@ function Home() {
                  <><FaUnlock style={{marginRight: '8px', verticalAlign: 'middle'}}/> Daftar Sekarang</>}
               </button>
             </form>
+          </div>
+
+          <div style={{ marginTop: '1.5rem', textAlign: 'center' }}>
+            <button onClick={handleShare} className="share-btn glass-panel" style={{ padding: '1rem 2rem', background: 'rgba(255,255,255,0.05)', color: 'white', border: '1px solid var(--glass-border)', borderRadius: '8px', cursor: 'pointer', fontWeight: 'bold', fontSize: '1.1rem', transition: '0.3s' }} onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.1)'} onMouseLeave={(e) => e.currentTarget.style.background = 'rgba(255,255,255,0.05)'}>
+              <FaShareAlt style={{marginRight: '8px'}} /> Bagikan Event Ini
+            </button>
           </div>
         </div>
 
