@@ -73,7 +73,7 @@ function TrackStatus() {
           </div>
         </form>
 
-        {loading && <p style={{ textAlign: 'center', marginTop: '2rem' }}>Mencari secara realtime...</p>}
+        {loading && <p style={{ textAlign: 'center', marginTop: '2rem' }}>Memuat data...</p>}
 
         {status === 'found' && (
           <div style={{ marginTop: '2rem', padding: '1.5rem', background: 'rgba(16, 185, 129, 0.1)', border: '1px solid var(--success)', borderRadius: '8px', textAlign: 'center' }}>
