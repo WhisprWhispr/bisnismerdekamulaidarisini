@@ -87,7 +87,7 @@
   flex-direction: column;
   align-items: center;
   backdrop-filter: blur(10px);
-  animation: rgbGlow 4s linear infinite;
+  animation: rgbGlow 4s linear infinite; 
 }
 
 .countdown-value {
@@ -405,11 +405,7 @@
 }
 
 @keyframes rgbGlow {
-  0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), inset 0 0 5px rgba(255, 0, 0, 0.4); border-color: rgba(255, 0, 0, 0.8); }
-  16% { box-shadow: 0 0 15px rgba(255, 0, 255, 0.8), inset 0 0 5px rgba(255, 0, 255, 0.4); border-color: rgba(255, 0, 255, 0.8); }
-  33% { box-shadow: 0 0 15px rgba(0, 0, 255, 0.8), inset 0 0 5px rgba(0, 0, 255, 0.4); border-color: rgba(0, 0, 255, 0.8); }
-  50% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.8), inset 0 0 5px rgba(0, 255, 255, 0.4); border-color: rgba(0, 255, 255, 0.8); }
-  66% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.8), inset 0 0 5px rgba(0, 255, 0, 0.4); border-color: rgba(0, 255, 0, 0.8); }
-  83% { box-shadow: 0 0 15px rgba(255, 255, 0, 0.8), inset 0 0 5px rgba(255, 255, 0, 0.4); border-color: rgba(255, 255, 0, 0.8); }
-  100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), inset 0 0 5px rgba(255, 0, 0, 0.4); border-color: rgba(255, 0, 0, 0.8); }
+  0% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5), inset 0 0 5px rgba(255, 0, 0, 0.3); border-color: rgba(255, 0, 0, 0.5); }
+  50% { box-shadow: 0 0 25px rgba(255, 50, 50, 0.9), inset 0 0 10px rgba(255, 50, 50, 0.6); border-color: rgba(255, 50, 50, 0.9); }
+  100% { box-shadow: 0 0 10px rgba(255, 0, 0, 0.5), inset 0 0 5px rgba(255, 0, 0, 0.3); border-color: rgba(255, 0, 0, 0.5); }
 }
