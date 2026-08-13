@@ -86,8 +86,8 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
   backdrop-filter: blur(10px);
+  animation: rgbGlow 4s linear infinite;
 }
 
 .countdown-value {
@@ -402,4 +402,14 @@
 .domain-input-group {
   display: flex;
   gap: 10px;
+}
+
+@keyframes rgbGlow {
+  0% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), inset 0 0 5px rgba(255, 0, 0, 0.4); border-color: rgba(255, 0, 0, 0.8); }
+  16% { box-shadow: 0 0 15px rgba(255, 0, 255, 0.8), inset 0 0 5px rgba(255, 0, 255, 0.4); border-color: rgba(255, 0, 255, 0.8); }
+  33% { box-shadow: 0 0 15px rgba(0, 0, 255, 0.8), inset 0 0 5px rgba(0, 0, 255, 0.4); border-color: rgba(0, 0, 255, 0.8); }
+  50% { box-shadow: 0 0 15px rgba(0, 255, 255, 0.8), inset 0 0 5px rgba(0, 255, 255, 0.4); border-color: rgba(0, 255, 255, 0.8); }
+  66% { box-shadow: 0 0 15px rgba(0, 255, 0, 0.8), inset 0 0 5px rgba(0, 255, 0, 0.4); border-color: rgba(0, 255, 0, 0.8); }
+  83% { box-shadow: 0 0 15px rgba(255, 255, 0, 0.8), inset 0 0 5px rgba(255, 255, 0, 0.4); border-color: rgba(255, 255, 0, 0.8); }
+  100% { box-shadow: 0 0 15px rgba(255, 0, 0, 0.8), inset 0 0 5px rgba(255, 0, 0, 0.4); border-color: rgba(255, 0, 0, 0.8); }
 }
