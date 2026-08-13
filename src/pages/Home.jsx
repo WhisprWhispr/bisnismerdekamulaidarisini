@@ -163,8 +163,44 @@ function Home() {
         return;
       }
 
-      // Check slot availability
+      // Ambil IP Address User
+      let userIP = "unknown";
+      try {
+        const ipRes = await fetch('https://api.ipify.org?format=json');
+        const ipData = await ipRes.json();
+        userIP = ipData.ip;
+      } catch (e) {
+        console.error("Gagal mengambil IP:", e);
+      }
+
+      // Check slot availability & duplicates
       const querySnapshot = await getDocs(collection(db, "registrations"));
+      
+      let isDuplicate = false;
+      let duplicateReason = "";
+
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        if (data.email === formData.email) {
+          isDuplicate = true;
+          duplicateReason = "Email ini";
+        }
+        if (data.whatsapp === formData.whatsapp) {
+          isDuplicate = true;
+          duplicateReason = "Nomor WhatsApp ini";
+        }
+        if (userIP !== "unknown" && data.ip === userIP) {
+          isDuplicate = true;
+          duplicateReason = "Perangkat/Jaringan (IP) ini";
+        }
+      });
+
+      if (isDuplicate) {
+        setStatus({ loading: false, error: null, success: false });
+        toast.error(`Pendaftaran ditolak! ${duplicateReason} sudah terdaftar sebelumnya.`);
+        return;
+      }
+
       if (querySnapshot.size >= 10) {
         setStatus({ loading: false, error: null, success: false });
         setSlotCount(querySnapshot.size);
@@ -175,6 +211,7 @@ function Home() {
       // Submit data
       await addDoc(collection(db, "registrations"), {
         ...formData,
+        ip: userIP,
         timestamp: new Date().getTime() // Store local timestamp for reference
       });
 
