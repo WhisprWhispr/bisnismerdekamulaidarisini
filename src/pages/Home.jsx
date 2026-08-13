@@ -71,8 +71,28 @@ function Home() {
 
     initializeTimer();
 
+    let hasNotifiedFull = false;
+
     const unsubscribe = onSnapshot(collection(db, "registrations"), (snapshot) => {
-      setSlotCount(snapshot.size);
+      const size = snapshot.size;
+      setSlotCount(size);
+      
+      // Munculkan notifikasi pop-up otomatis jika slot sudah habis
+      if (size >= 10 && !hasNotifiedFull) {
+        toast('Mohon Maaf, Kuota Telah Habis!', {
+          icon: '🛑',
+          duration: 6000,
+          style: {
+            background: 'rgba(239, 68, 68, 0.95)', // var(--error) tapi transparan
+            color: '#fff',
+            fontWeight: 'bold',
+            fontSize: '1.2rem',
+            padding: '20px',
+            border: '2px solid #fff'
+          },
+        });
+        hasNotifiedFull = true;
+      }
     }, (error) => {
       console.error("Error listening to slots realtime", error);
     });
